@@ -57,8 +57,6 @@ func process_body_parts(velocity, mouse_position):
 		
 func set_leg_state(velocity, mouse_position):
 	var move_angle = angle_difference(rotation, velocity.angle())
-	print(move_angle)
-	print(velocity)
 	if velocity.x == 0 and velocity.y == 0:
 		$Legs.current_state = $Legs.LEG_STATE.idle
 	elif abs(move_angle) > PI - PI/4:
@@ -72,7 +70,6 @@ func set_leg_state(velocity, mouse_position):
 		
 func set_arm_rotations(arm, velocity, mouse_position):
 	var mouse_distance = position.distance_to(mouse_position)
-	arm.rotation = -asin(arm.position.y/mouse_distance)
 	if mouse_distance > 100:
 		arm.rotation = -asin(arm.position.y/mouse_distance)
 	else:

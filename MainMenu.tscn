@@ -24,5 +24,15 @@ text = "Start Client"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="TextEdit" type="TextEdit" parent="."]
+margin_left = 427.166
+margin_top = 370.166
+margin_right = 576.166
+margin_bottom = 410.166
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="pressed" from="StartServerButton" to="." method="_on_StartServerButton_pressed"]
 [connection signal="pressed" from="StartClientButton" to="." method="_on_StartClientButton_pressed"]
+[connection signal="text_changed" from="TextEdit" to="." method="_on_TextEdit_text_changed"]
