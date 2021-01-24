@@ -28,9 +28,9 @@ func _peer_connected(player_id):
 	print(str(player_id) + " connected.")
 	var newPlayer = {
 		player_id = player_id,
-		position = Position2D.new(),
+		position = Vector2.ZERO,
 		velocity = Vector2.ZERO,
-		mouse_position = Position2D.new(),
+		mouse_position = Vector2.ZERO,
 		state = "idle", # TODO: Make this an enum
 		is_pressing_right = false,
 		is_pressing_left = false,

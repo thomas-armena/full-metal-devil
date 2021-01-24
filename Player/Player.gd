@@ -8,14 +8,17 @@ var player_data
 func register(id):
 	set_name(str(id))
 	player_id = id
+	
 
 enum PLAYER_STATE {
 	idle
 }
 
-#func _ready():
-	#if Server.is_client:
-		#Server.connect("update", self, "_on_update")
+func _ready():
+	if player_id == get_tree().get_network_unique_id():
+		$Camera2D.current = true
+	if Server.is_client:
+		Server.connect("update", self, "_on_update")
 
 func _physics_process(delta):
 
@@ -23,16 +26,15 @@ func _physics_process(delta):
 		player_data = Server.world_state.players[player_id]
 		process_velocity(delta)
 		move_and_collide(velocity)
-		process_rotation()
-		process_body_parts()
+		process_rotation(player_data.mouse_position)
+		process_body_parts(velocity, player_data.mouse_position)
 		Server.update_player(player_id, {
 			"position": position,
+			"velocity": velocity,
 			"state": "idle", # TODO
 		})
 	
-func process_rotation():
-	var mouse_position = player_data.mouse_position
-	print("HJE",mouse_position)
+func process_rotation(mouse_position):
 	rotation = position.angle_to_point(mouse_position) + PI 
 	
 func process_velocity(delta):
@@ -48,13 +50,15 @@ func process_velocity(delta):
 		velocity.y -= 1
 	velocity = velocity.normalized() * delta * speed
 
-func process_body_parts():
-	set_leg_state()
-	set_arm_rotations($LeftArm)
-	set_arm_rotations($RightArm)
+func process_body_parts(velocity, mouse_position):
+	set_leg_state(velocity, mouse_position)
+	set_arm_rotations($LeftArm, velocity, mouse_position)
+	set_arm_rotations($RightArm, velocity, mouse_position)
 		
-func set_leg_state():
+func set_leg_state(velocity, mouse_position):
 	var move_angle = angle_difference(rotation, velocity.angle())
+	print(move_angle)
+	print(velocity)
 	if velocity.x == 0 and velocity.y == 0:
 		$Legs.current_state = $Legs.LEG_STATE.idle
 	elif abs(move_angle) > PI - PI/4:
@@ -66,8 +70,7 @@ func set_leg_state():
 	else:
 		$Legs.current_state = $Legs.LEG_STATE.walking_forward
 		
-func set_arm_rotations(arm):
-	var mouse_position = player_data.mouse_position
+func set_arm_rotations(arm, velocity, mouse_position):
 	var mouse_distance = position.distance_to(mouse_position)
 	arm.rotation = -asin(arm.position.y/mouse_distance)
 	if mouse_distance > 100:
@@ -87,4 +90,13 @@ func _process(delta):
 	if Server.is_client:
 		var mouse_position = $Camera2D.get_global_mouse_position()
 		Server.client_mouse_position = mouse_position
+		
+func _on_update(world_state):
+	#if player_id == get_tree().get_network_unique_id():
+	var server_player = world_state.players[player_id]
+	position = server_player.position
+	process_rotation(server_player.mouse_position)
+	process_body_parts(server_player.velocity, server_player.mouse_position)
+		
+	
 
