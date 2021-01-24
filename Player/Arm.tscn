@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://assets/spr_armbasic_shoot_0.png" type="Texture" id=1]
 [ext_resource path="res://assets/spr_armbasic_reload2_4.png" type="Texture" id=2]
@@ -23,6 +23,7 @@
 [ext_resource path="res://assets/spr_armbasic_reload2_3.png" type="Texture" id=21]
 [ext_resource path="res://assets/spr_armbasic_shoot_1.png" type="Texture" id=22]
 [ext_resource path="res://assets/spr_armbasic_dead_0.png" type="Texture" id=23]
+[ext_resource path="res://Player/Arm.gd" type="Script" id=24]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -31,14 +32,14 @@ animations = [ {
 "name": "idle",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 8 ), ExtResource( 9 ), ExtResource( 15 ), ExtResource( 21 ), ExtResource( 2 ), ExtResource( 4 ), ExtResource( 5 ), ExtResource( 3 ), ExtResource( 10 ), ExtResource( 18 ), ExtResource( 13 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 20 ) ],
-"loop": true,
-"name": "reloading",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 1 ), ExtResource( 22 ), ExtResource( 16 ), ExtResource( 11 ) ],
 "loop": true,
 "name": "shooting",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 8 ), ExtResource( 9 ), ExtResource( 15 ), ExtResource( 21 ), ExtResource( 2 ), ExtResource( 4 ), ExtResource( 5 ), ExtResource( 3 ), ExtResource( 10 ), ExtResource( 18 ), ExtResource( 13 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 20 ) ],
+"loop": true,
+"name": "reloading",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 23 ) ],
@@ -48,6 +49,7 @@ animations = [ {
 } ]
 
 [node name="Arm" type="Node2D"]
+script = ExtResource( 24 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 1 )
