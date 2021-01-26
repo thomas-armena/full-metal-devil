@@ -35,7 +35,7 @@ func _physics_process(delta):
 		})
 	
 func process_rotation(mouse_position):
-	rotation = position.angle_to_point(mouse_position) + PI 
+	rotation = position.angle_to_point(mouse_position) + PI/2
 	
 func process_velocity(delta):
 	
@@ -70,8 +70,8 @@ func set_leg_state(velocity, mouse_position):
 		
 func set_arm_rotations(arm, velocity, mouse_position):
 	var mouse_distance = position.distance_to(mouse_position)
-	if mouse_distance > 100:
-		arm.rotation = -asin(arm.position.y/mouse_distance)
+	if mouse_distance > 60:
+		arm.rotation = asin(arm.position.x/mouse_distance)
 	else:
 		arm.rotation = 0
 

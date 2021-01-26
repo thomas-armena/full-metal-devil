@@ -16,21 +16,21 @@ func _ready():
 func _process(delta):
 	if current_state == LEG_STATE.idle:
 		rotation = 0
-		hide()
-		$AnimatedSprite.play("idle")
+		#hide()
+		#$AnimatedSprite.play("idle")
 	elif current_state == LEG_STATE.walking_forward:
 		rotation = 0
-		show()
-		$AnimatedSprite.play("walking")
+		#show()
+		#$AnimatedSprite.play("walking")
 	elif current_state == LEG_STATE.walking_left:
 		rotation = - PI/7
-		show()
-		$AnimatedSprite.play("walking")
+		#show()
+		#$AnimatedSprite.play("walking")
 	elif current_state == LEG_STATE.walking_right:
 		rotation = PI/7
-		show()
-		$AnimatedSprite.play("walking")
+		#show()
+		#$AnimatedSprite.play("walking")
 	elif current_state == LEG_STATE.walking_backwards:
 		rotation = 0
-		show()
-		$AnimatedSprite.play("walking", true)
+		#show()
+		#$AnimatedSprite.play("walking", true)

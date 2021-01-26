@@ -1,17 +1,18 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://assets/spr_head2_0.png" type="Texture" id=1]
+[ext_resource path="res://assets/v1/body.png" type="Texture" id=1]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
 "frames": [ ExtResource( 1 ) ],
 "loop": true,
-"name": "idle",
+"name": "body",
 "speed": 5.0
 } ]
 
 [node name="Head" type="Node2D"]
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+position = Vector2( -0.111362, 9.57716 )
 frames = SubResource( 1 )
-animation = "idle"
+animation = "body"
