@@ -13,6 +13,7 @@ animations = [ {
 [node name="Head" type="Node2D"]
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-position = Vector2( -0.111362, 9.57716 )
+position = Vector2( 9, 0 )
+rotation = 4.71239
 frames = SubResource( 1 )
 animation = "body"
