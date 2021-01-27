@@ -19,3 +19,11 @@ position = Vector2( 6, 1 )
 rotation = 4.71239
 frames = SubResource( 1 )
 animation = "idle"
+
+[node name="BulletSpawnPoint" type="Node2D" parent="."]
+position = Vector2( 25, 1 )
+
+[node name="Cooldown" type="Timer" parent="."]
+wait_time = 0.4
+one_shot = true
+[connection signal="timeout" from="Cooldown" to="." method="_on_Cooldown_timeout"]

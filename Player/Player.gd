@@ -21,18 +21,18 @@ func _ready():
 		Server.connect("update", self, "_on_update")
 
 func _physics_process(delta):
-
-	if not Server.is_client:
-		player_data = Server.world_state.players[player_id]
-		process_velocity(delta)
-		move_and_collide(velocity)
-		process_rotation(player_data.mouse_position)
-		process_body_parts(velocity, player_data.mouse_position)
-		Server.update_player(player_id, {
-			"position": position,
-			"velocity": velocity,
-			"state": "idle", # TODO
-		})
+	if Server.is_client: return
+	player_data = Server.world_state.players[player_id]
+	process_velocity(delta)
+	move_and_collide(velocity)
+	process_rotation(player_data.mouse_position)
+	process_body_parts(velocity, player_data.mouse_position)
+	process_shooting(player_data.is_pressing_leftshoot, player_data.is_pressing_rightshoot)
+	Server.update_player(player_id, {
+		"position": position,
+		"velocity": velocity,
+		"state": "idle", # TODO
+	})
 	
 func process_rotation(mouse_position):
 	rotation = position.angle_to_point(mouse_position) + PI
@@ -54,6 +54,12 @@ func process_body_parts(velocity, mouse_position):
 	set_leg_state(velocity, mouse_position)
 	set_arm_rotations($LeftArm, velocity, mouse_position)
 	set_arm_rotations($RightArm, velocity, mouse_position)
+	
+func process_shooting(is_pressing_leftshoot, is_pressing_rightshoot):
+	if is_pressing_leftshoot:
+		$LeftArm.shoot()
+	if is_pressing_rightshoot:
+		$RightArm.shoot()
 		
 func set_leg_state(velocity, mouse_position):
 	var move_angle = angle_difference(rotation, velocity.angle())
@@ -94,6 +100,7 @@ func _on_update(world_state):
 	position = server_player.position
 	process_rotation(server_player.mouse_position)
 	process_body_parts(server_player.velocity, server_player.mouse_position)
+	process_shooting(server_player.is_pressing_leftshoot, server_player.is_pressing_rightshoot)
 		
 	
 

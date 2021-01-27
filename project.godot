@@ -25,6 +25,8 @@ Server="*res://Server.tscn"
 
 [display]
 
+window/size/width=2574
+window/size/height=1271
 window/dpi/allow_hidpi=true
 
 [input]
