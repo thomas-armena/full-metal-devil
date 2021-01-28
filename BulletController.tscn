@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://BulletController.gd" type="Script" id=1]
+
+[sub_resource type="Shader" id=2]
+code = "shader_type canvas_item;
+
+uniform sampler2D noise: hint_white;
+
+void fragment() { 
+	float speed_factor = TIME / 2.0;
+	float thickness_factor = 0.2;
+
+	COLOR = vec4(cos(speed_factor), sin(speed_factor), 1, 1);
+	
+	vec2 fake_UV = vec2(abs(0.5 - UV.y) * thickness_factor, COLOR.a + speed_factor);
+
+	vec4 n = texture(noise, fake_UV);
+
+	float grey = 1.0 - (0.2126 * n.r + 0.7152 * n.g + 0.0722 * n.b);
+	COLOR = n;
+}"
+
+[sub_resource type="ShaderMaterial" id=3]
+shader = SubResource( 2 )
+
+[sub_resource type="Gradient" id=1]
+offsets = PoolRealArray( 0, 0.251656, 0.675497 )
+colors = PoolColorArray( 1, 1, 1, 0, 0.984375, 0.955888, 0.496033, 0.646349, 1, 0.972549, 0.529412, 1 )
+
+[node name="BulletController" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="BulletTrail" type="Line2D" parent="."]
+material = SubResource( 3 )
+width = 2.0
+default_color = Color( 0.996078, 0.878431, 0.411765, 1 )
+gradient = SubResource( 1 )
