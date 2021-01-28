@@ -16,3 +16,4 @@ func _physics_process(delta):
 		$BulletTrail.add_point(bullet.position)
 		while $BulletTrail.get_point_count() > 10:
 			$BulletTrail.remove_point(0)
+
