@@ -19,6 +19,8 @@ func _ready():
 		$Camera2D.current = true
 	if Server.is_client:
 		Server.connect("update", self, "_on_update")
+		Server.connect("left_arm_shoot", self, "_handle_left_arm_shoot")
+		Server.connect("right_arm_shoot", self, "_handle_right_arm_shoot")
 
 func _physics_process(delta):
 	if Server.is_client: return
@@ -56,10 +58,11 @@ func process_body_parts(velocity, mouse_position):
 	set_arm_rotations($RightArm, velocity, mouse_position)
 	
 func process_shooting(is_pressing_leftshoot, is_pressing_rightshoot):
-	if is_pressing_leftshoot:
-		$LeftArm.shoot()
-	if is_pressing_rightshoot:
-		$RightArm.shoot()
+	var universal_random = rand_range(0,1)
+	if is_pressing_leftshoot and $LeftArm.shoot(universal_random):
+		Server.left_arm_shoot(player_id, universal_random)
+	if is_pressing_rightshoot and $RightArm.shoot(universal_random):
+		Server.right_arm_shoot(player_id, universal_random)
 		
 func set_leg_state(velocity, mouse_position):
 	var move_angle = angle_difference(rotation, velocity.angle())
@@ -95,12 +98,16 @@ func _process(delta):
 		Server.client_mouse_position = mouse_position
 		
 func _on_update(world_state):
-	#if player_id == get_tree().get_network_unique_id():
 	var server_player = world_state.players[player_id]
 	position = server_player.position
 	process_rotation(server_player.mouse_position)
 	process_body_parts(server_player.velocity, server_player.mouse_position)
-	process_shooting(server_player.is_pressing_leftshoot, server_player.is_pressing_rightshoot)
+	#process_shooting(server_player.is_pressing_leftshoot, server_player.is_pressing_rightshoot)
 		
+func _handle_left_arm_shoot(id, universal_random):
+	if id != player_id: return
+	$LeftArm.shoot(universal_random)
 	
-
+func _handle_right_arm_shoot(id, universal_random):
+	if id != player_id: return
+	$RightArm.shoot(universal_random)

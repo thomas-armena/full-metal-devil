@@ -11,9 +11,10 @@ func spawn_bullet(pos, dir):
 	bullet.start(dir)
 	add_child(bullet)
 	
-func _physics_process(delta):
-	if bullet:
-		$BulletTrail.add_point(bullet.position)
-		while $BulletTrail.get_point_count() > 10:
-			$BulletTrail.remove_point(0)
-
+func _process(delta):
+	if not bullet:
+		handle_bullet_death()
+			
+func handle_bullet_death():
+	if $BulletTrail.get_point_count() > 0:
+		$BulletTrail.remove_point(0)

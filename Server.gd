@@ -8,12 +8,14 @@ var port = 4000
 var max_players = 4
 
 var world_state = {
-	players = {}
+	players = {},
+	enemies = {},
 }
 
 ### SERVER 
 
 signal player_entered(player_id)
+signal enemy_spawned(enemy_id)
 
 func init_server():
 	is_client = false
@@ -51,12 +53,38 @@ remote func update_player(player_id, change):
 		world_state.players[player_id][key] = change[key]
 	update_clients()
 	
+func register_enemy(enemy_id):
+	var newEnemy = {
+		enemy_id = enemy_id,
+		position = Vector2.ZERO,
+		velocity = Vector2.ZERO,
+		state = "idle", # TODO: Make this an enum
+		type = "basic",
+		hp = 100,
+	}
+	world_state.enemies[enemy_id] = newEnemy
+	emit_signal("enemy_spawned", enemy_id)
+	update_clients()
+	
+func update_enemy(enemy_id, change):
+	for key in change:
+		world_state.enemies[enemy_id][key] = change[key]
+	update_clients()
+	
+func left_arm_shoot(player_id, universal_random):
+	rpc("handle_left_arm_shoot", player_id, universal_random)
+
+func right_arm_shoot(player_id, universal_random):
+	rpc("handle_right_arm_shoot", player_id, universal_random)
+	
 func update_clients():
 	rpc_unreliable("world_updated", world_state)
 	
 ### CLIENT
 
 signal update(world_state)
+signal left_arm_shoot(player_id, universal_random)
+signal right_arm_shoot(player_id, universal_random)
 
 var client_mouse_position = Vector2(0,0) # Must be set externally
 var client_left_shoot_pressed = false
@@ -126,5 +154,13 @@ func send_inputs():
 				mouse_position = client_mouse_position,
 			})
 		client_right_shoot_pressed = false
+		
+remote func handle_left_arm_shoot(player_id, universal_random):
+	emit_signal("left_arm_shoot", player_id, universal_random)
+	
+remote func handle_right_arm_shoot(player_id, universal_random):
+	emit_signal("right_arm_shoot", player_id, universal_random)
+	
+	
 	
 
